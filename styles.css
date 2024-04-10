@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Nunito', sans-serif;
-  letter-spacing: 1.2px;
+  letter-spacing: 2px;
 }
 //colors
 //primary: #0C2D57
@@ -14,10 +14,10 @@ body {
 }
 
 .main-box {
-  width: 1200px;
+  width: 1100px;
   margin: 0 auto;
   min-height: 100vh;
-  background: #424769;
+  background: #ffc94a;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,13 +27,15 @@ body {
   height: 100px;
   width: 100%;
   background: #2d3250;
-  border-bottom: 3px solid #fc6736;
+  border-bottom: 5px solid #fc6736;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .logo-box {
   height: 50px;
-  width: 140px;
-  background: orange;
-  font-weight: 900;
+  width: 180px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -43,18 +45,47 @@ body {
   transform: rotate(45deg);
 }
 .logo-text {
-  font-weight: 800;
-  color: #fff;
+  font-weight: 900;
+  color: #fc6736;
 }
 
 .grid-box {
-  height: 100px;
+  height: 700px;
   width: 100%;
+  background: #efecec;
 }
 
+.card-box {
+  border: 1px solid;
+  height: 360px;
+  width: 240px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-box {
+  border: 1px solid;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+.card-img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+.movie-detail-box {
+  height: 140px;
+  width: 200px;
+  background: #fff;
+}
 .footer {
   height: 60px;
   width: 100%;
   background: #2d3250;
-  border-top: 3px solid #fc6736;
+  border-top: 5px solid #fc6736;
 }
