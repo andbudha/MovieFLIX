@@ -1,12 +1,35 @@
+window.setTimeout(function () {
+  document.querySelector('.search-input').focus();
+}, 0);
 //dom references
-const gridBox = document.querySelector('.grid-box');
+const gridBox = document.querySelector('.grid-section');
+const searchInput = document.querySelector('.search-input');
+const removeInputValueBtnBox = document.querySelector(
+  '.remove-input-value-btn-box'
+);
+
+//creating fa-xmark icon element
+const faXmarkIcon = document.createElement('i');
+faXmarkIcon.setAttribute('class', 'fa-solid fa-xmark');
+
+searchInput.addEventListener('input', (event) => {
+  if (event.target.value) {
+    //appending remove-mark-icon
+    removeInputValueBtnBox.appendChild(faXmarkIcon);
+  }
+});
+
+//reseting input
+faXmarkIcon.addEventListener('click', () => {
+  searchInput.value = '';
+  removeInputValueBtnBox.removeChild(faXmarkIcon);
+});
 
 //getting movies data
 const createMovieCard = (movies) => {
   if (!movies) {
     //creating loader box
     const loaderBox = document.createElement('div');
-    console.log(loaderBox);
     loaderBox.setAttribute('class', 'loader-box');
     gridBox.appendChild(loaderBox);
     const loaderSpan = document.createElement('span');
@@ -15,12 +38,18 @@ const createMovieCard = (movies) => {
   } else {
     const loaderBox = document.querySelector('.loader-box');
     loaderBox.remove();
-    console.log(movies.length);
+
+    //leaving movies with the targeted poster width
     const filteredMovies = movies.filter(
       (movie) => movie.thumbnail_width < 262
     );
-    console.log(filteredMovies.length);
-    for (let movie of filteredMovies) {
+
+    const searchInputFilteredMovies = filteredMovies.filter((movie) =>
+      movie.title.toLowerCase().includes('le')
+    );
+
+    //creating movie cards
+    for (let movie of searchInputFilteredMovies) {
       //creating card-box div
       const cardDiv = document.createElement('div');
       cardDiv.setAttribute('class', 'card-box');
