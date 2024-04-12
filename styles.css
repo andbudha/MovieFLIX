@@ -10,6 +10,7 @@ primary: #2d3250
 secondary: #424769
 navbar&footer-border: #F99417
 card-text& logo: #F99417
+search input color:  #7077a1
 */
 body {
   width: 100vw;
@@ -52,7 +53,71 @@ body {
   color: #f99417;
 }
 
-.grid-box {
+/* search-box-section */
+.search-section {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-input-box {
+  height: 50px;
+  width: 340px;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+.fa-magnifying-glass {
+  height: 34px;
+  width: 40px;
+  background: #fff;
+  color: #424769;
+  border-radius: 16px 0 0 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-input {
+  height: 34px;
+  width: 240px;
+  padding: 12px 0;
+  outline: none;
+  border: none;
+  color: #2d3250;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+.search-input::placeholder {
+  color: #7077a1;
+}
+.remove-input-value-btn-box {
+  height: 34px;
+  width: 40px;
+  background: #fff;
+  color: #424769;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 16px 16px 0;
+}
+
+.fa-xmark {
+  height: 34px;
+  width: 40px;
+  background: #fff;
+  color: #424769;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 16px 16px 0;
+  cursor: pointer;
+}
+
+/* grid-box section */
+.grid-section {
   min-height: 400px;
   width: 90%;
   display: flex;
