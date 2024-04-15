@@ -16,15 +16,19 @@
       href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <link rel="stylesheet" href="styles.css" />
-    <title>MOOFLIX</title>
+    <title>MovieFLIX</title>
   </head>
   <body>
     <div class="main-box">
       <nav class="navbar">
         <div class="logo-box">
           <i class="fa-solid fa-film fa-2x"></i>
-          <h2 class="logo-text">MOOFLIX</h2>
+          <h2 class="logo-text">MovieFLIX</h2>
         </div>
       </nav>
       <section class="search-section">
@@ -38,6 +42,29 @@
           <div class="remove-input-value-btn-box">
             <!-- <i class="fa-solid fa-xmark"></i> -->
           </div>
+        </div>
+      </section>
+      <section class="filter-section">
+        <span class="material-symbols-outlined filter"> filter_list </span>
+        <div class="selection-box expanded hidden">
+          <select class="release-year-select">
+            <option value="release year">release year</option>
+            <option value="release year">2010</option>
+            <option value="release year">2011</option>
+            <option value="release year">2012</option>
+            <option value="release year">2013</option>
+            <option value="release year">2014</option>
+            <option value="release year">2015</option>
+          </select>
+          <select class="movie-genre-select">
+            <option value="genre">genre</option>
+            <option value="Action">Action</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Drama">Drama</option>
+            <option value="Musical">Musical</option>
+            <option value="Documentary">Documentary</option>
+          </select>
         </div>
       </section>
       <section class="grid-section"></section>
@@ -55,7 +82,7 @@
             ></a>
           </div>
           <div class="footer-text-box">
-            <h5>&copy; 2024, MOOFLIX, All Rights Reserved</h5>
+            <h5>&copy; 2024, MovieFLIX, All Rights Reserved</h5>
           </div>
         </div>
       </footer>

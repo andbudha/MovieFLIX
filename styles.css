@@ -115,6 +115,47 @@ body {
   border-radius: 0 16px 16px 0;
   cursor: pointer;
 }
+/* filter-section */
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.filter {
+  height: 30px;
+  width: 30px;
+  color: #f99417;
+  font-size: 1.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.expanded {
+  height: 50px;
+  width: 340px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.release-year-select,
+.movie-genre-select {
+  height: 26px;
+  width: 150px;
+  outline: #f99417 1px solid;
+  border: none;
+  color: #2d3250;
+  font-weight: bold;
+  cursor: pointer;
+}
 
 /* grid-box section */
 .grid-section {
@@ -127,7 +168,7 @@ body {
 }
 
 .loader-box {
-  height: 400px;
+  height: 600px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -172,12 +213,12 @@ body {
 
 .card-img-box {
   width: 200px;
-  height: 200px;
+  height: 220px;
   object-fit: contain;
 }
 .card-img {
   width: 200px;
-  height: 200px;
+  height: 220px;
   object-fit: contain;
 }
 
