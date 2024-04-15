@@ -1,3 +1,4 @@
+//input auto focus on loading main page
 window.setTimeout(function () {
   document.querySelector('.search-input').focus();
 }, 0);
@@ -7,6 +8,26 @@ const searchInput = document.querySelector('.search-input');
 const removeInputValueBtnBox = document.querySelector(
   '.remove-input-value-btn-box'
 );
+const searchBtn = document.querySelector('.fa-magnifying-glass');
+const filter = document.querySelector('.filter');
+const selectionBox = document.querySelector('.selection-box');
+
+filter.addEventListener('click', () => {
+  selectionBox.classList.toggle('hidden');
+});
+//getting data
+const getMovies = async () => {
+  const url = 'https://5b81e3264853b358.mokky.dev/cabmovies';
+  const response = await fetch('data.json');
+  const data = await response.json();
+  //leaving movies with the targeted poster width of less 262px
+  const moviesWithApproprPosterSize = data.filter(
+    (movie) => movie.thumbnail_width < 262
+  );
+  createMovieCard(moviesWithApproprPosterSize.slice(1, 9));
+
+  return moviesWithApproprPosterSize;
+};
 
 //creating fa-xmark icon element
 const faXmarkIcon = document.createElement('i');
@@ -19,13 +40,13 @@ searchInput.addEventListener('input', (event) => {
   }
 });
 
-//reseting input
+//reseting search-input
 faXmarkIcon.addEventListener('click', () => {
   searchInput.value = '';
   removeInputValueBtnBox.removeChild(faXmarkIcon);
 });
 
-//getting movies data
+//getting movies data and creating movie cards
 const createMovieCard = (movies) => {
   if (!movies) {
     //creating loader box
@@ -39,13 +60,8 @@ const createMovieCard = (movies) => {
     const loaderBox = document.querySelector('.loader-box');
     loaderBox.remove();
 
-    //leaving movies with the targeted poster width
-    const filteredMovies = movies.filter(
-      (movie) => movie.thumbnail_width < 262
-    );
-
-    const searchInputFilteredMovies = filteredMovies.filter((movie) =>
-      movie.title.toLowerCase().includes('le')
+    const searchInputFilteredMovies = movies.filter((movie) =>
+      movie.title.toLowerCase().includes('')
     );
 
     //creating movie cards
@@ -104,4 +120,6 @@ const createMovieCard = (movies) => {
   }
 };
 
+//get data and create movie cards on initial rendering
+getMovies();
 createMovieCard();
