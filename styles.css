@@ -10,6 +10,7 @@ primary: #2d3250
 secondary: #424769
 navbar&footer-border: #F99417
 card-text& logo: #F99417
+search btn hover: #FC6736
 search input color:  #7077a1
 */
 body {
@@ -137,6 +138,7 @@ body {
   height: 50px;
   width: 340px;
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-around;
   align-items: center;
 }
@@ -148,7 +150,7 @@ body {
 .release-year-select,
 .movie-genre-select {
   height: 26px;
-  width: 150px;
+  width: 120px;
   outline: #f99417 1px solid;
   border: none;
   color: #2d3250;
@@ -156,6 +158,33 @@ body {
   cursor: pointer;
 }
 
+.search-btn-box {
+  height: 32px;
+  width: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-btn {
+  height: 28px;
+  width: 68px;
+  background: #f99417;
+
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.search-btn:hover {
+  background: #f57d1f;
+  transition: 0.4s;
+}
+
+.search-btn:not(:hover) {
+  transition: 0.5s;
+}
 /* grid-box section */
 .grid-section {
   min-height: 400px;
@@ -167,7 +196,7 @@ body {
 }
 
 .loader-box {
-  height: 600px;
+  height: 300px;
   width: 100%;
   display: flex;
   justify-content: center;
