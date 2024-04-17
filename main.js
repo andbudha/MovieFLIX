@@ -13,7 +13,7 @@ filterIcon.addEventListener('click', () => {
 //getting data from rest-api
 const getMovies = async () => {
   const url = 'https://5b81e3264853b358.mokky.dev/cabmovies';
-  const response = await fetch(url);
+  const response = await fetch('data.json');
   const data = await response.json();
   //leaving movies with the targeted poster width of less 262px
   const movies = data.filter(
@@ -41,6 +41,7 @@ searchInput.addEventListener('input', (event) => {
 faXmarkIcon.addEventListener('click', () => {
   searchInput.value = '';
   removeInputValueBtnBox.removeChild(faXmarkIcon);
+  getMovies();
 });
 
 //getting movies data and creating movie cards
@@ -48,8 +49,21 @@ const createMovieCard = (movies) => {
   const gridBox = document.querySelector('.grid-section');
   //resetting the existing data
   gridBox.innerHTML = '';
-  //creating movie cards
-  if (movies) {
+
+  if (!movies) {
+    //creating loader box
+    const loaderBox = document.createElement('div');
+    loaderBox.setAttribute('class', 'loader-box');
+    gridBox.appendChild(loaderBox);
+    const loaderSpan = document.createElement('span');
+    loaderSpan.setAttribute('class', 'loader');
+    loaderBox.appendChild(loaderSpan);
+    console.log(loaderBox);
+  } else {
+    // const loaderBox = document.querySelector('.loader-box');
+    // loaderBox.remove();
+    //creating movie cards
+
     for (let movie of movies) {
       //creating card-box div
       const cardDiv = document.createElement('div');
@@ -107,38 +121,39 @@ const createMovieCard = (movies) => {
 
 //controller function
 const controller = (movies) => {
-  createMovieCard(movies);
-  filterByReleaseYear(movies);
-  filterByGenre(movies);
-  filterMoviesUponClick(movies);
+  createMovieCard(movies.slice(1, 9));
   filterOnMovieTitleTyping(movies);
+  getSelectOptionValues(movies);
 };
-//filtering by release year
-const filterByReleaseYear = (movies) => {
+
+//filtering according to the search input value
+const filterOnMovieTitleTyping = (movies) => {
+  const searchInput = document.querySelector('.search-input');
+  searchInput.addEventListener('input', () => {
+    searchtimer = setTimeout(() => {
+      const filteredMoviesUponInputValue = movies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+      createMovieCard(filteredMoviesUponInputValue);
+      clearTimeout(searchtimer);
+    }, 1500);
+  });
+};
+
+const getSelectOptionValues = (movies) => {
   //getting movie release years
   const releaseYearList = [...new Set(movies.map((movie) => movie.year))];
   //creating select element and option children
-  const select = document.createElement('select');
-  select.setAttribute('class', 'release-year-select');
+  const selectYear = document.createElement('select');
+  selectYear.setAttribute('class', 'release-year-select');
   for (let year of releaseYearList) {
     const option = document.createElement('option');
     option.setAttribute('value', year);
     option.innerText = year;
-    select.appendChild(option);
+    selectYear.appendChild(option);
   }
-  selectionBox.appendChild(select);
+  selectionBox.appendChild(selectYear);
 
-  const releaseYear = document.querySelector('.release-year-select');
-  releaseYear.addEventListener('change', (event) => {
-    const byReleaseYearFilteredMovies = movies.filter(
-      (movie) => movie.year === Number(event.currentTarget.value)
-    );
-    createMovieCard(byReleaseYearFilteredMovies);
-  });
-};
-
-//filtering by movie genre
-const filterByGenre = (movies) => {
   //getting movie genre list
   const genreList = [
     ...new Set(
@@ -146,50 +161,49 @@ const filterByGenre = (movies) => {
     ),
   ];
   //creating select element and option children
-  const select = document.createElement('select');
-  select.setAttribute('class', 'movie-genre-select');
+  const selectGenre = document.createElement('select');
+  selectGenre.setAttribute('class', 'movie-genre-select');
   for (let genre of genreList) {
     const option = document.createElement('option');
     option.setAttribute('value', genre);
     option.innerText = genre;
-    select.appendChild(option);
+    selectGenre.appendChild(option);
   }
-  selectionBox.appendChild(select);
+  selectionBox.appendChild(selectGenre);
+
+  //creating array upon select-option
+  let filteredArrUponSelectOption = [];
+  //initial
+  let selectValueArr = [{ genre: 'Comedy' }, { year: 2010 }];
+
+  //filtering by genre
   const genreSelect = document.querySelector('.movie-genre-select');
   genreSelect.addEventListener('change', (event) => {
-    const byGenreFilteredMovies = movies.filter(
-      (movie) => movie.genres[0] === event.currentTarget.value
-    );
-    createMovieCard(byGenreFilteredMovies);
+    selectValueArr[0].genre = event.currentTarget.value;
+    console.log(selectValueArr[0].genre);
+    console.log(selectValueArr);
   });
-};
 
-//filtering according to the search input value
-const filterMoviesUponClick = (movies) => {
-  const searchInput = document.querySelector('.search-input');
-  const searchBtn = document.querySelector('.fa-magnifying-glass');
+  //filtering by release year
+  const releaseYear = document.querySelector('.release-year-select');
+  releaseYear.addEventListener('change', (event) => {
+    selectValueArr[1].year = Number(event.currentTarget.value);
+    console.log(selectValueArr[1].year);
+    console.log(selectValueArr);
+  });
+
+  //getting search btn value
+  const searchBtn = document.querySelector('.search-btn');
   searchBtn.addEventListener('click', () => {
-    console.log(movies);
-
-    const filteredMoviesUponInputValue = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
-    );
-    createMovieCard(filteredMoviesUponInputValue);
-  });
-};
-
-const filterOnMovieTitleTyping = (movies) => {
-  const searchInput = document.querySelector('.search-input');
-
-  searchInput.addEventListener('input', () => {
-    searchtimer = setTimeout(() => {
-      console.log(searchInput.value);
-      const filteredMoviesUponInputValue = movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
+    const onClickSearchFilteredMovies = movies.filter((movie) => {
+      return (
+        movie.year === selectValueArr[1].year &&
+        movie.genres[0] === selectValueArr[0].genre
       );
-      createMovieCard(filteredMoviesUponInputValue);
-      clearTimeout(searchtimer);
-    }, 1500);
+    });
+    console.log(filteredArrUponSelectOption);
+    console.log(onClickSearchFilteredMovies);
+    createMovieCard(onClickSearchFilteredMovies);
   });
 };
 

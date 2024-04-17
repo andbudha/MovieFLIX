@@ -64,7 +64,7 @@ body {
 }
 .search-input-box {
   height: 50px;
-  width: 340px;
+  width: 350px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,15 +74,14 @@ body {
   width: 40px;
   background: #fff;
   color: #424769;
-  border-radius: 16px 0 0 16px;
-  cursor: pointer;
+  border-radius: 3px 0 0 3px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .search-input {
   height: 34px;
-  width: 240px;
+  width: 250px;
   padding: 12px 0;
   outline: none;
   border: none;
@@ -101,7 +100,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0 16px 16px 0;
+  border-radius: 0 3px 3px 0;
 }
 
 .fa-xmark {
@@ -112,7 +111,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0 16px 16px 0;
+  border-radius: 0 3px 3px 0;
   cursor: pointer;
 }
 /* filter-section */
@@ -136,7 +135,7 @@ body {
 
 .expanded {
   height: 50px;
-  width: 340px;
+  width: 350px;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-around;
@@ -150,7 +149,7 @@ body {
 .release-year-select,
 .movie-genre-select {
   height: 26px;
-  width: 120px;
+  width: 130px;
   outline: #f99417 1px solid;
   border: none;
   color: #2d3250;
@@ -160,7 +159,7 @@ body {
 
 .search-btn-box {
   height: 32px;
-  width: 72px;
+  width: 68px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -169,7 +168,6 @@ body {
   height: 28px;
   width: 68px;
   background: #f99417;
-
   border-radius: 3px;
   display: flex;
   justify-content: center;
@@ -241,12 +239,12 @@ body {
 
 .card-img-box {
   width: 200px;
-  height: 220px;
+  height: 200px;
   object-fit: contain;
 }
 .card-img {
   width: 200px;
-  height: 220px;
+  height: 200px;
   object-fit: contain;
 }
 
