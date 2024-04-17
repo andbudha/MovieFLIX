@@ -81,7 +81,7 @@ body {
 }
 .search-input {
   height: 34px;
-  width: 250px;
+  width: 260px;
   padding: 12px 0;
   outline: none;
   border: none;
@@ -148,13 +148,13 @@ body {
 
 .release-year-select,
 .movie-genre-select {
-  height: 26px;
+  height: 28px;
   width: 130px;
-  outline: #f99417 1px solid;
   border: none;
   color: #2d3250;
   font-weight: bold;
   cursor: pointer;
+  border-radius: 3px;
 }
 
 .search-btn-box {
@@ -168,6 +168,7 @@ body {
   height: 28px;
   width: 68px;
   background: #f99417;
+  border: none;
   border-radius: 3px;
   display: flex;
   justify-content: center;
@@ -176,12 +177,15 @@ body {
   letter-spacing: 0.5px;
 }
 .search-btn:hover {
-  background: #f57d1f;
+  background: #f6b17a;
   transition: 0.4s;
 }
 
 .search-btn:not(:hover) {
   transition: 0.5s;
+}
+.search-btn:disabled {
+  background: #f6b17a;
 }
 /* grid-box section */
 .grid-section {

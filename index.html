@@ -34,19 +34,22 @@
       <section class="search-section">
         <div class="search-input-box">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input
-            class="search-input"
-            type="text"
-            placeholder="enter movie title"
-          />
+          <input class="search-input" type="text" placeholder="search" />
           <div class="remove-input-value-btn-box"></div>
         </div>
       </section>
       <section class="filter-section">
         <span class="material-symbols-outlined filter"> filter_list </span>
         <div class="selection-box expanded hidden">
+          <select class="release-year-select">
+            <option value="any year">select year</option>
+          </select>
+          <select class="movie-genre-select">
+            <option value="any genre">select genre</option>
+          </select>
           <div class="search-btn-box">
-            <div class="search-btn">search</div>
+            <!-- <div class="search-btn">search</div> -->
+            <button class="search-btn">search</button>
           </div>
         </div>
       </section>

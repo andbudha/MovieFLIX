@@ -62,8 +62,8 @@ const createMovieCard = (movies) => {
   } else {
     // const loaderBox = document.querySelector('.loader-box');
     // loaderBox.remove();
-    //creating movie cards
 
+    //creating movie cards
     for (let movie of movies) {
       //creating card-box div
       const cardDiv = document.createElement('div');
@@ -143,9 +143,8 @@ const filterOnMovieTitleTyping = (movies) => {
 const getSelectOptionValues = (movies) => {
   //getting movie release years
   const releaseYearList = [...new Set(movies.map((movie) => movie.year))];
-  //creating select element and option children
-  const selectYear = document.createElement('select');
-  selectYear.setAttribute('class', 'release-year-select');
+  //targeting select element and appending option children
+  const selectYear = document.querySelector('.release-year-select');
   for (let year of releaseYearList) {
     const option = document.createElement('option');
     option.setAttribute('value', year);
@@ -161,8 +160,7 @@ const getSelectOptionValues = (movies) => {
     ),
   ];
   //creating select element and option children
-  const selectGenre = document.createElement('select');
-  selectGenre.setAttribute('class', 'movie-genre-select');
+  const selectGenre = document.querySelector('.movie-genre-select');
   for (let genre of genreList) {
     const option = document.createElement('option');
     option.setAttribute('value', genre);
@@ -171,38 +169,33 @@ const getSelectOptionValues = (movies) => {
   }
   selectionBox.appendChild(selectGenre);
 
-  //creating array upon select-option
-  let filteredArrUponSelectOption = [];
   //initial
-  let selectValueArr = [{ genre: 'Comedy' }, { year: 2010 }];
+  let selectOptionValues = { genre: 'Drama', year: 2010 };
 
   //filtering by genre
   const genreSelect = document.querySelector('.movie-genre-select');
   genreSelect.addEventListener('change', (event) => {
-    selectValueArr[0].genre = event.currentTarget.value;
-    console.log(selectValueArr[0].genre);
-    console.log(selectValueArr);
+    selectOptionValues.genre = event.currentTarget.value;
   });
+  console.log(genreSelect.value);
 
   //filtering by release year
   const releaseYear = document.querySelector('.release-year-select');
   releaseYear.addEventListener('change', (event) => {
-    selectValueArr[1].year = Number(event.currentTarget.value);
-    console.log(selectValueArr[1].year);
-    console.log(selectValueArr);
+    selectOptionValues.year = Number(event.currentTarget.value);
   });
 
-  //getting search btn value
+  console.log(releaseYear.value);
+
+  //filtering data on search-btn click
   const searchBtn = document.querySelector('.search-btn');
   searchBtn.addEventListener('click', () => {
     const onClickSearchFilteredMovies = movies.filter((movie) => {
       return (
-        movie.year === selectValueArr[1].year &&
-        movie.genres[0] === selectValueArr[0].genre
+        movie.year === selectOptionValues.year &&
+        movie.genres[0] === selectOptionValues.genre
       );
     });
-    console.log(filteredArrUponSelectOption);
-    console.log(onClickSearchFilteredMovies);
     createMovieCard(onClickSearchFilteredMovies);
   });
 };
