@@ -12,15 +12,21 @@ filterIcon.addEventListener('click', () => {
 
 //getting data from rest-api
 const getMovies = async () => {
-  const url = 'https://5b81e3264853b358.mokky.dev/cabmovies';
-  const response = await fetch('data.json');
-  const data = await response.json();
-  //leaving movies with the targeted poster width of less 262px
-  const movies = data.filter(
-    (movie) => movie.thumbnail && movie.thumbnail_width < 262
-  );
-  controller(movies);
-  return movies;
+  showSpinner();
+  try {
+    const response = await fetch('mixed.json');
+    const data = await response.json();
+    console.log(data);
+    //leaving movies with the targeted poster width of less 262px
+    const movies = data.filter(
+      (movie) => movie.thumbnail && movie.thumbnail_width < 262
+    );
+    controller(movies.slice(1, 4));
+    return movies;
+  } catch (error) {
+    hideSpinner();
+    console.log(error);
+  }
 };
 
 //creating input-fa-xmark icon element to reset the search-input
@@ -44,84 +50,84 @@ faXmarkIcon.addEventListener('click', () => {
   getMovies();
 });
 
+//creating and setting spinner
+const showSpinner = () => {
+  const gridBox = document.querySelector('.grid-section');
+  const loaderBox = document.createElement('div');
+  loaderBox.setAttribute('class', 'loader-box');
+  gridBox.appendChild(loaderBox);
+  const loaderSpan = document.createElement('span');
+  loaderSpan.setAttribute('class', 'loader');
+  loaderBox.appendChild(loaderSpan);
+};
+const hideSpinner = () => {
+  const loaderBox = document.querySelector('.loader-box');
+  loaderBox.remove();
+};
+
 //getting movies data and creating movie cards
 const createMovieCard = (movies) => {
   const gridBox = document.querySelector('.grid-section');
+
   //resetting the existing data
   gridBox.innerHTML = '';
-
-  if (!movies) {
-    //creating loader box
-    const loaderBox = document.createElement('div');
-    loaderBox.setAttribute('class', 'loader-box');
-    gridBox.appendChild(loaderBox);
-    const loaderSpan = document.createElement('span');
-    loaderSpan.setAttribute('class', 'loader');
-    loaderBox.appendChild(loaderSpan);
-    console.log(loaderBox);
-  } else {
-    // const loaderBox = document.querySelector('.loader-box');
-    // loaderBox.remove();
-
-    //creating movie cards
-    for (let movie of movies) {
-      //creating card-box div
-      const cardDiv = document.createElement('div');
-      cardDiv.setAttribute('class', 'card-box');
-      gridBox.appendChild(cardDiv);
-      //creating card-img-box div
-      const cardImgBox = document.createElement('div');
-      cardImgBox.setAttribute('class', 'card-img-box');
-      cardDiv.appendChild(cardImgBox);
-      //creating img element
-      const imgEl = document.createElement('img');
-      imgEl.setAttribute('class', 'card-img');
-      imgEl.setAttribute('src', movie.thumbnail);
-      imgEl.setAttribute('alt', 'movie-poster');
-      cardImgBox.appendChild(imgEl);
-      //creating movie-detail-box
-      const movieDetailBox = document.createElement('div');
-      movieDetailBox.setAttribute('class', 'movie-detail-box');
-      cardDiv.appendChild(movieDetailBox);
-      //creating details-header-title
-      const detailsHeaderTitle = document.createElement('h5');
-      detailsHeaderTitle.innerText = 'Title: ';
-      const titleSpan = document.createElement('span');
-      titleSpan.setAttribute('class', 'details');
-      titleSpan.innerText = movie.title ? movie.title : 'Uknown';
-      detailsHeaderTitle.appendChild(titleSpan);
-      movieDetailBox.appendChild(detailsHeaderTitle);
-      //creating details-header-year
-      const detailsHeaderYear = document.createElement('h5');
-      detailsHeaderYear.innerText = 'Year: ';
-      const yearSpan = document.createElement('span');
-      yearSpan.setAttribute('class', 'details');
-      yearSpan.innerText = movie.year ? movie.year : 'Uknown';
-      detailsHeaderYear.appendChild(yearSpan);
-      movieDetailBox.appendChild(detailsHeaderYear);
-      //creating details-header-genre
-      const detailsHeaderGenre = document.createElement('h5');
-      detailsHeaderGenre.innerText = 'Genre: ';
-      const genreSpan = document.createElement('span');
-      genreSpan.setAttribute('class', 'details');
-      genreSpan.innerText = movie.genres[0] ? movie.genres[0] : 'Uknown';
-      detailsHeaderGenre.appendChild(genreSpan);
-      movieDetailBox.appendChild(detailsHeaderGenre);
-      //creating details-header-cast
-      const detailsHeaderCast = document.createElement('h5');
-      detailsHeaderCast.innerText = 'Starring: ';
-      const castSpan = document.createElement('span');
-      castSpan.setAttribute('class', 'details');
-      castSpan.innerText = movie.cast[0] ? movie.cast[0] : 'Uknown';
-      detailsHeaderCast.appendChild(castSpan);
-      movieDetailBox.appendChild(detailsHeaderCast);
-    }
+  for (let movie of movies) {
+    //creating card-box div
+    const cardDiv = document.createElement('div');
+    cardDiv.setAttribute('class', 'card-box');
+    gridBox.appendChild(cardDiv);
+    //creating card-img-box div
+    const cardImgBox = document.createElement('div');
+    cardImgBox.setAttribute('class', 'card-img-box');
+    cardDiv.appendChild(cardImgBox);
+    //creating img element
+    const imgEl = document.createElement('img');
+    imgEl.setAttribute('class', 'card-img');
+    imgEl.setAttribute('src', movie.thumbnail);
+    imgEl.setAttribute('alt', 'movie-poster');
+    cardImgBox.appendChild(imgEl);
+    //creating movie-detail-box
+    const movieDetailBox = document.createElement('div');
+    movieDetailBox.setAttribute('class', 'movie-detail-box');
+    cardDiv.appendChild(movieDetailBox);
+    //creating details-header-title
+    const detailsHeaderTitle = document.createElement('h5');
+    detailsHeaderTitle.innerText = 'Title: ';
+    const titleSpan = document.createElement('span');
+    titleSpan.setAttribute('class', 'details');
+    titleSpan.innerText = movie.title ? movie.title : 'Uknown';
+    detailsHeaderTitle.appendChild(titleSpan);
+    movieDetailBox.appendChild(detailsHeaderTitle);
+    //creating details-header-year
+    const detailsHeaderYear = document.createElement('h5');
+    detailsHeaderYear.innerText = 'Year: ';
+    const yearSpan = document.createElement('span');
+    yearSpan.setAttribute('class', 'details');
+    yearSpan.innerText = movie.year ? movie.year : 'Uknown';
+    detailsHeaderYear.appendChild(yearSpan);
+    movieDetailBox.appendChild(detailsHeaderYear);
+    //creating details-header-genre
+    const detailsHeaderGenre = document.createElement('h5');
+    detailsHeaderGenre.innerText = 'Genre: ';
+    const genreSpan = document.createElement('span');
+    genreSpan.setAttribute('class', 'details');
+    genreSpan.innerText = movie.genres[0] ? movie.genres[0] : 'Uknown';
+    detailsHeaderGenre.appendChild(genreSpan);
+    movieDetailBox.appendChild(detailsHeaderGenre);
+    //creating details-header-cast
+    const detailsHeaderCast = document.createElement('h5');
+    detailsHeaderCast.innerText = 'Starring: ';
+    const castSpan = document.createElement('span');
+    castSpan.setAttribute('class', 'details');
+    castSpan.innerText = movie.cast[0] ? movie.cast[0] : 'Uknown';
+    detailsHeaderCast.appendChild(castSpan);
+    movieDetailBox.appendChild(detailsHeaderCast);
   }
 };
 
 //controller function
 const controller = (movies) => {
-  createMovieCard(movies.slice(1, 9));
+  createMovieCard(movies);
   filterOnMovieTitleTyping(movies);
   getSelectOptionValues(movies);
 };
@@ -170,22 +176,19 @@ const getSelectOptionValues = (movies) => {
   selectionBox.appendChild(selectGenre);
 
   //initial
-  let selectOptionValues = { genre: 'Drama', year: 2010 };
+  let selectOptionValues = { genre: 'all', year: 'any' };
 
   //filtering by genre
   const genreSelect = document.querySelector('.movie-genre-select');
   genreSelect.addEventListener('change', (event) => {
     selectOptionValues.genre = event.currentTarget.value;
   });
-  console.log(genreSelect.value);
 
   //filtering by release year
   const releaseYear = document.querySelector('.release-year-select');
   releaseYear.addEventListener('change', (event) => {
     selectOptionValues.year = Number(event.currentTarget.value);
   });
-
-  console.log(releaseYear.value);
 
   //filtering data on search-btn click
   const searchBtn = document.querySelector('.search-btn');
@@ -196,9 +199,18 @@ const getSelectOptionValues = (movies) => {
         movie.genres[0] === selectOptionValues.genre
       );
     });
-    createMovieCard(onClickSearchFilteredMovies);
+    if (
+      selectOptionValues.year === 'any' ||
+      selectOptionValues.genre === 'all'
+    ) {
+      createMovieCard(movies);
+    } else {
+      createMovieCard(onClickSearchFilteredMovies);
+    }
   });
 };
+
+//paginator
 
 //get data and create movie cards on initial rendering
 getMovies();
