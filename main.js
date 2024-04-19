@@ -14,7 +14,7 @@ filterIcon.addEventListener('click', () => {
 const getMovies = async () => {
   showSpinner();
   try {
-    const response = await fetch('mixed.json');
+    const response = await fetch(url);
     const data = await response.json();
     console.log(data);
     //leaving movies with the targeted poster width of less 262px
@@ -127,8 +127,6 @@ const createMovieCard = (movies) => {
   }
 };
 
-//paginator
-let currentPage = 2;
 //controller function
 const controller = (movies) => {
   createMovieCard(movies);
@@ -219,7 +217,8 @@ const getSelectOptionValues = (movies) => {
 const pageBox = document.querySelector('.page-box');
 const btnNext = document.querySelector('.fa-chevron-right');
 const btnPrev = document.querySelector('.fa-chevron-left');
-
+//paginator
+let currentPage = 1;
 const itemsPerPage = 8;
 
 function initializePaginator(movies, currentPage) {
