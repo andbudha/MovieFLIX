@@ -21,7 +21,9 @@ const getMovies = async () => {
     const movies = data.filter(
       (movie) => movie.thumbnail && movie.thumbnail_width < 262
     );
-    controller(movies.slice(1, 4));
+    // controller(movies.slice(1, 4));
+    controller(movies);
+
     return movies;
   } catch (error) {
     hideSpinner();
@@ -125,11 +127,14 @@ const createMovieCard = (movies) => {
   }
 };
 
+//paginator
+let currentPage = 2;
 //controller function
 const controller = (movies) => {
   createMovieCard(movies);
   filterOnMovieTitleTyping(movies);
   getSelectOptionValues(movies);
+  initializePaginator(movies, currentPage);
 };
 
 //filtering according to the search input value
@@ -211,6 +216,42 @@ const getSelectOptionValues = (movies) => {
 };
 
 //paginator
+const pageBox = document.querySelector('.page-box');
+const btnNext = document.querySelector('.fa-chevron-right');
+const btnPrev = document.querySelector('.fa-chevron-left');
+
+const itemsPerPage = 8;
+
+function initializePaginator(movies, currentPage) {
+  //resetting paginator inneHTML content
+  pageBox.innerHTML = '';
+
+  const totalPageNum = Math.ceil(movies.length / itemsPerPage);
+  let start = itemsPerPage * (currentPage - 1);
+  let end = start + itemsPerPage;
+  let paginatedMovies = movies.slice(start, end);
+  createMovieCard(paginatedMovies);
+  createPageBtns(totalPageNum, movies);
+}
+
+function createPageBtns(totalPageNum, movies) {
+  for (let i = 1; i <= totalPageNum; i++) {
+    const page = document.createElement('div');
+    page.setAttribute('class', 'page');
+    page.innerText = i;
+    pageBox.appendChild(page);
+    pageBtn(page, i, movies);
+  }
+}
+
+function pageBtn(pageBtn, pageNum, movies) {
+  pageBtn.innerText = pageNum;
+  if (currentPage === pageNum) pageBtn.classList.add('active-page');
+  pageBtn.addEventListener('click', () => {
+    currentPage = pageNum;
+    initializePaginator(movies, currentPage);
+  });
+}
 
 //get data and create movie cards on initial rendering
 getMovies();
