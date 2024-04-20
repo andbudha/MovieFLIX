@@ -21,10 +21,8 @@ const getMovies = async () => {
     const movies = data.filter(
       (movie) => movie.thumbnail && movie.thumbnail_width < 262
     );
-    // controller(movies.slice(1, 4));
+    hideSpinner();
     controller(movies);
-
-    return movies;
   } catch (error) {
     hideSpinner();
     console.log(error);
@@ -69,10 +67,11 @@ const hideSpinner = () => {
 
 //getting movies data and creating movie cards
 const createMovieCard = (movies) => {
-  const gridBox = document.querySelector('.grid-section');
-
   //resetting the existing data
+  const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
+
+  //looping through the data in oder to create cards
   for (let movie of movies) {
     //creating card-box div
     const cardDiv = document.createElement('div');
@@ -143,7 +142,7 @@ const filterOnMovieTitleTyping = (movies) => {
       const filteredMoviesUponInputValue = movies.filter((movie) =>
         movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
       );
-      createMovieCard(filteredMoviesUponInputValue);
+      initializePaginator(filteredMoviesUponInputValue, currentPage);
       clearTimeout(searchtimer);
     }, 1500);
   });
@@ -217,7 +216,7 @@ const getSelectOptionValues = (movies) => {
 const pageBox = document.querySelector('.page-box');
 const btnNext = document.querySelector('.fa-chevron-right');
 const btnPrev = document.querySelector('.fa-chevron-left');
-//paginator
+
 let currentPage = 1;
 const itemsPerPage = 8;
 
@@ -250,6 +249,30 @@ function pageBtn(pageBtn, pageNum, movies) {
     currentPage = pageNum;
     initializePaginator(movies, currentPage);
   });
+}
+
+//displaying no-match-found notification
+function displayNoMatchFound() {
+  const gridBox = document.querySelector('.grid-section');
+  const noMatchFoundBox = document.createElement('div');
+  noMatchFoundBox.setAttribute('class', 'no-match-found-box');
+  const sadFaceIcon = document.createElement('i');
+  sadFaceIcon.setAttribute('class', 'fa-regular fa-face-sad-tear fa-5x');
+  noMatchFoundBox.appendChild(sadFaceIcon);
+  const sorryText = document.createElement('h2');
+  sorryText.innerText = 'Sorry';
+  noMatchFoundBox.appendChild(sorryText);
+  const noMatchFoundText = document.createElement('h2');
+  noMatchFoundText.innerText = 'No Match Found!';
+  noMatchFoundBox.appendChild(noMatchFoundText);
+  gridBox.appendChild(noMatchFoundBox);
+}
+
+//hiding no-match-found notification
+function hideNoMatchFound() {
+  const noMatchFoundBox = document.querySelector('.no-match-found-box');
+  noMatchFoundBox.classList.add('hide-no-match-found-box');
+  console.log(noMatchFoundBox);
 }
 
 //get data and create movie cards on initial rendering
