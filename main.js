@@ -49,8 +49,13 @@ searchInput.addEventListener('input', (event) => {
   }
 });
 
+//refetching data on search input focus
+searchInput.addEventListener('focus', () => {
+  console.log('focused');
+  getMovies();
+});
 //resetting search-input
-faXmarkIcon.addEventListener('click', () => {
+function resetSearchInput() {
   searchInput.value = '';
   removeInputValueBtnBox.removeChild(faXmarkIcon);
   const selectionBox = document.querySelector('.selection-box');
@@ -58,7 +63,8 @@ faXmarkIcon.addEventListener('click', () => {
     selectionBox.classList.add('hidden');
   }
   getMovies();
-});
+}
+faXmarkIcon.addEventListener('click', resetSearchInput);
 
 //creating and setting spinner
 const showSpinner = () => {
@@ -173,9 +179,13 @@ const getSelectOptionValues = (movies) => {
   const yearListObj = new Set(movies.map((movie) => movie.year));
   const yearListArr = [...yearListObj];
   const sortedReleaseYearList = yearListArr.sort((a, b) => (a > b ? 1 : -1));
-  console.log(sortedReleaseYearList);
 
   //creating year select element and appending option children
+  const anyYearOption = document.createElement('option');
+  anyYearOption.setAttribute('value', '0');
+  anyYearOption.innerText = 'any year';
+  selectYear.appendChild(anyYearOption);
+
   for (let year of sortedReleaseYearList) {
     const option = document.createElement('option');
     option.setAttribute('value', year);
@@ -191,7 +201,12 @@ const getSelectOptionValues = (movies) => {
   const genreListArr = [...genreListObj];
   const sortedGenreList = genreListArr.sort((a, b) => (a > b ? 1 : -1));
 
-  //creating genre select element and appending option children
+  //creating initial genre option element
+  const allGenresOption = document.createElement('option');
+  allGenresOption.setAttribute('value', 'all');
+  allGenresOption.innerText = 'all genres';
+  selectGenre.appendChild(allGenresOption);
+  //creating genre option element and appending to their parent element
   for (let genre of sortedGenreList) {
     const option = document.createElement('option');
     option.setAttribute('value', genre);
@@ -295,8 +310,11 @@ function pageBtn(pageBtn, pageNum, movies) {
 function displayNoMatchFound() {
   const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
+
   //resetting paginator inneHTML content
   pageBox.innerHTML = '';
+
+  //creating the div element for no-match-found notification
   const noMatchFoundBox = document.createElement('div');
   noMatchFoundBox.setAttribute('class', 'no-match-found-box');
   const sadFaceIcon = document.createElement('i');
