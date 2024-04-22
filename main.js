@@ -142,7 +142,12 @@ const filterOnMovieTitleTyping = (movies) => {
       const filteredMoviesUponInputValue = movies.filter((movie) =>
         movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
       );
-      initializePaginator(filteredMoviesUponInputValue, currentPage);
+      if (filteredMoviesUponInputValue.length) {
+        initializePaginator(filteredMoviesUponInputValue, currentPage);
+      } else {
+        displayNoMatchFound();
+      }
+
       clearTimeout(searchtimer);
     }, 1500);
   });
@@ -214,8 +219,6 @@ const getSelectOptionValues = (movies) => {
 
 //paginator
 const pageBox = document.querySelector('.page-box');
-const btnNext = document.querySelector('.fa-chevron-right');
-const btnPrev = document.querySelector('.fa-chevron-left');
 
 let currentPage = 1;
 const itemsPerPage = 8;
@@ -254,6 +257,9 @@ function pageBtn(pageBtn, pageNum, movies) {
 //displaying no-match-found notification
 function displayNoMatchFound() {
   const gridBox = document.querySelector('.grid-section');
+  gridBox.innerHTML = '';
+  //resetting paginator inneHTML content
+  pageBox.innerHTML = '';
   const noMatchFoundBox = document.createElement('div');
   noMatchFoundBox.setAttribute('class', 'no-match-found-box');
   const sadFaceIcon = document.createElement('i');
