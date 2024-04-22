@@ -14,9 +14,8 @@ filterIcon.addEventListener('click', () => {
 const getMovies = async () => {
   showSpinner();
   try {
-    const response = await fetch(url);
+    const response = await fetch('mixed.json');
     const data = await response.json();
-    console.log(data);
     //leaving movies with the targeted poster width of less 262px
     const movies = data.filter(
       (movie) => movie.thumbnail && movie.thumbnail_width < 262
@@ -183,37 +182,62 @@ const getSelectOptionValues = (movies) => {
   selectionBox.appendChild(selectGenre);
 
   //initial
-  let selectOptionValues = { genre: 'all', year: 'any' };
+  let selectOptionValues = { genre: 'all', year: 0 };
 
   //filtering by genre
   const genreSelect = document.querySelector('.movie-genre-select');
+
   genreSelect.addEventListener('change', (event) => {
     selectOptionValues.genre = event.currentTarget.value;
+    console.log(event.currentTarget.value);
   });
 
   //filtering by release year
   const releaseYear = document.querySelector('.release-year-select');
+
   releaseYear.addEventListener('change', (event) => {
     selectOptionValues.year = Number(event.currentTarget.value);
+    console.log(event.currentTarget.value);
   });
 
   //filtering data on search-btn click
   const searchBtn = document.querySelector('.search-btn');
   searchBtn.addEventListener('click', () => {
-    const onClickSearchFilteredMovies = movies.filter((movie) => {
-      return (
-        movie.year === selectOptionValues.year &&
-        movie.genres[0] === selectOptionValues.genre
-      );
-    });
-    if (
-      selectOptionValues.year === 'any' ||
+    if (selectOptionValues.year === 0 && selectOptionValues.genre === 'all') {
+      initializePaginator(movies, currentPage);
+    } else if (
+      selectOptionValues.year !== 0 &&
       selectOptionValues.genre === 'all'
     ) {
-      createMovieCard(movies);
+      const filteredByYear = movies.filter(
+        (movie) => movie.year === selectOptionValues.year
+      );
+      console.log('filtered by year:', filteredByYear);
+      initializePaginator(filteredByYear, currentPage);
+    } else if (
+      selectOptionValues.genre !== 'all' &&
+      selectOptionValues.year === 0
+    ) {
+      const filteredByGenre = movies.filter(
+        (movie) => movie.genres[0] === selectOptionValues.genre
+      );
+      console.log('filtered by genre:', filteredByGenre);
+      initializePaginator(filteredByGenre, currentPage);
     } else {
-      createMovieCard(onClickSearchFilteredMovies);
+      const filteredByGenreAndYear = movies.filter((movie) => {
+        return (
+          movie.year === selectOptionValues.year &&
+          movie.genres[0] === selectOptionValues.genre
+        );
+      });
+      console.log('filtered by genre&year:', filteredByGenreAndYear);
+      if (!filteredByGenreAndYear.length) {
+        displayNoMatchFound();
+      } else {
+        initializePaginator(filteredByGenreAndYear, currentPage);
+      }
     }
+    console.log(selectOptionValues.genre, selectOptionValues.year);
   });
 };
 
