@@ -1,8 +1,3 @@
-//input auto focus on loading main page
-window.setTimeout(function () {
-  document.querySelector('.search-input').focus();
-}, 0);
-
 //displaying and hiding the advanced search
 const filterIcon = document.querySelector('.filter');
 const selectionBox = document.querySelector('.selection-box');
@@ -78,7 +73,7 @@ const showSpinner = () => {
 };
 const hideSpinner = () => {
   const loaderBox = document.querySelector('.loader-box');
-  loaderBox.remove();
+  if (loaderBox) loaderBox.remove();
 };
 
 //getting movies data and creating movie cards
