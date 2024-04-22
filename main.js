@@ -40,12 +40,23 @@ searchInput.addEventListener('input', (event) => {
     //appending remove-mark-icon
     removeInputValueBtnBox.appendChild(faXmarkIcon);
   }
+  if (!event.target.value && faXmarkIcon) {
+    removeInputValueBtnBox.removeChild(faXmarkIcon);
+  }
+  const selectionBox = document.querySelector('.selection-box');
+  if (!selectionBox.classList.contains('hidden')) {
+    selectionBox.classList.add('hidden');
+  }
 });
 
 //resetting search-input
 faXmarkIcon.addEventListener('click', () => {
   searchInput.value = '';
   removeInputValueBtnBox.removeChild(faXmarkIcon);
+  const selectionBox = document.querySelector('.selection-box');
+  if (!selectionBox.classList.contains('hidden')) {
+    selectionBox.classList.add('hidden');
+  }
   getMovies();
 });
 
@@ -153,11 +164,19 @@ const filterOnMovieTitleTyping = (movies) => {
 };
 
 const getSelectOptionValues = (movies) => {
-  //getting movie release years
-  const releaseYearList = [...new Set(movies.map((movie) => movie.year))];
-  //targeting select element and appending option children
+  const selectGenre = document.querySelector('.movie-genre-select');
   const selectYear = document.querySelector('.release-year-select');
-  for (let year of releaseYearList) {
+  selectGenre.innerHTML = '';
+  selectYear.innerHTML = '';
+
+  //getting movie release years
+  const yearListObj = new Set(movies.map((movie) => movie.year));
+  const yearListArr = [...yearListObj];
+  const sortedReleaseYearList = yearListArr.sort((a, b) => (a > b ? 1 : -1));
+  console.log(sortedReleaseYearList);
+
+  //creating year select element and appending option children
+  for (let year of sortedReleaseYearList) {
     const option = document.createElement('option');
     option.setAttribute('value', year);
     option.innerText = year;
@@ -166,14 +185,14 @@ const getSelectOptionValues = (movies) => {
   selectionBox.appendChild(selectYear);
 
   //getting movie genre list
-  const genreList = [
-    ...new Set(
-      movies.map((movie) => (movie.genres[0] ? movie.genres[0] : 'Unknown'))
-    ),
-  ];
-  //creating select element and option children
-  const selectGenre = document.querySelector('.movie-genre-select');
-  for (let genre of genreList) {
+  const genreListObj = new Set(
+    movies.map((movie) => (movie.genres[0] ? movie.genres[0] : 'Unknown'))
+  );
+  const genreListArr = [...genreListObj];
+  const sortedGenreList = genreListArr.sort((a, b) => (a > b ? 1 : -1));
+
+  //creating genre select element and appending option children
+  for (let genre of sortedGenreList) {
     const option = document.createElement('option');
     option.setAttribute('value', genre);
     option.innerText = genre;
@@ -181,7 +200,7 @@ const getSelectOptionValues = (movies) => {
   }
   selectionBox.appendChild(selectGenre);
 
-  //initial
+  //initial select input values
   let selectOptionValues = { genre: 'all', year: 0 };
 
   //filtering by genre
@@ -189,7 +208,6 @@ const getSelectOptionValues = (movies) => {
 
   genreSelect.addEventListener('change', (event) => {
     selectOptionValues.genre = event.currentTarget.value;
-    console.log(event.currentTarget.value);
   });
 
   //filtering by release year
@@ -197,7 +215,6 @@ const getSelectOptionValues = (movies) => {
 
   releaseYear.addEventListener('change', (event) => {
     selectOptionValues.year = Number(event.currentTarget.value);
-    console.log(event.currentTarget.value);
   });
 
   //filtering data on search-btn click
@@ -212,7 +229,6 @@ const getSelectOptionValues = (movies) => {
       const filteredByYear = movies.filter(
         (movie) => movie.year === selectOptionValues.year
       );
-      console.log('filtered by year:', filteredByYear);
       initializePaginator(filteredByYear, currentPage);
     } else if (
       selectOptionValues.genre !== 'all' &&
@@ -221,7 +237,6 @@ const getSelectOptionValues = (movies) => {
       const filteredByGenre = movies.filter(
         (movie) => movie.genres[0] === selectOptionValues.genre
       );
-      console.log('filtered by genre:', filteredByGenre);
       initializePaginator(filteredByGenre, currentPage);
     } else {
       const filteredByGenreAndYear = movies.filter((movie) => {
@@ -230,14 +245,12 @@ const getSelectOptionValues = (movies) => {
           movie.genres[0] === selectOptionValues.genre
         );
       });
-      console.log('filtered by genre&year:', filteredByGenreAndYear);
       if (!filteredByGenreAndYear.length) {
         displayNoMatchFound();
       } else {
         initializePaginator(filteredByGenreAndYear, currentPage);
       }
     }
-    console.log(selectOptionValues.genre, selectOptionValues.year);
   });
 };
 
