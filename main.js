@@ -91,13 +91,16 @@ const createMovieCard = (movies) => {
     //creating card-img-box div
     const cardImgBox = document.createElement('div');
     cardImgBox.setAttribute('class', 'card-img-box');
+
     cardDiv.appendChild(cardImgBox);
     //creating img element
     const imgEl = document.createElement('img');
     imgEl.setAttribute('class', 'card-img');
     imgEl.setAttribute('src', movie.thumbnail);
     imgEl.setAttribute('alt', 'movie-poster');
+    imgEl.setAttribute('value', movie.title);
     cardImgBox.appendChild(imgEl);
+    magnifyPoster(cardDiv, imgEl, movie.title);
     //creating movie-detail-box
     const movieDetailBox = document.createElement('div');
     movieDetailBox.setAttribute('class', 'movie-detail-box');
@@ -136,6 +139,33 @@ const createMovieCard = (movies) => {
     movieDetailBox.appendChild(detailsHeaderCast);
   }
 };
+
+//poster magnifying upon hovering
+function magnifyPoster(cardDiv, imgEl, movieTitle) {
+  if (imgEl) {
+    cardDiv.addEventListener('mouseover', (event) => {
+      event.stopPropagation();
+      const value = imgEl.getAttribute('value');
+      const title = movieTitle;
+      if (value === title) {
+        imgEl.classList.remove('card-img');
+        imgEl.classList.add('magnified-img');
+      }
+    });
+  }
+
+  if (imgEl) {
+    imgEl.addEventListener('mouseout', (event) => {
+      event.stopPropagation();
+      const value = imgEl.getAttribute('value');
+      const title = movieTitle;
+      if (value === title) {
+        imgEl.classList.remove('magnified-img');
+        imgEl.classList.add('card-img');
+      }
+    });
+  }
+}
 
 //controller function
 const controller = (movies) => {
