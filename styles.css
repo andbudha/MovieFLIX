@@ -51,6 +51,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  cursor: pointer;
 }
 .fa-film {
   color: #fff;
@@ -237,7 +238,6 @@ body {
 
 .card-box {
   position: relative;
-  border-radius: 5px;
   height: 340px;
   width: 220px;
   padding: 10px;
@@ -419,6 +419,12 @@ body {
 
 .footer-text-box {
   color: #f99417;
+}
+
+/* error icon */
+.connection-error {
+  font-size: 4rem;
+  margin: 20px 0;
 }
 
 /* media queries */

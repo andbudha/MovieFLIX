@@ -1,3 +1,9 @@
+//refresh page upon logo click
+const logo = document.querySelector('.logo-box');
+logo.addEventListener('click', () => {
+  getMovies();
+});
+
 //displaying and hiding the advanced search
 const filterIcon = document.querySelector('.filter');
 const selectionBox = document.querySelector('.selection-box');
@@ -7,21 +13,62 @@ filterIcon.addEventListener('click', () => {
 
 //getting data from rest-api
 const getMovies = async () => {
+  let errorMsg = '';
   showSpinner();
   try {
-    const response = await fetch('mixed.json');
+    const response = await fetch(url);
     const data = await response.json();
-    //leaving movies with the targeted poster width of less 262px
-    const movies = data.filter(
-      (movie) => movie.thumbnail && movie.thumbnail_width < 262
-    );
-    hideSpinner();
-    controller(movies);
+    console.log(data);
+    if (!data.length && data.statusCode === 404) {
+      console.log(data);
+      errorCatching(data);
+    } else if (!data.length && data.statusCode === 403) {
+      console.log(data);
+      errorCatching(data);
+    } else {
+      hideSpinner();
+      controller(data);
+    }
   } catch (error) {
-    hideSpinner();
     console.log(error);
+    const errorObj = {
+      statusCode: 'Some Error Occurred',
+      message: 'Try Again Later, Please!',
+    };
+    errorCatching(errorObj);
+  } finally {
+    hideSpinner();
   }
 };
+
+function errorCatching(error) {
+  const gridBox = document.querySelector('.grid-section');
+  gridBox.innerHTML = '';
+
+  //resetting paginator inneHTML content
+  pageBox.innerHTML = '';
+
+  //creating the div element for no-match-found notification
+  const errorBox = document.createElement('div');
+  errorBox.setAttribute('class', 'no-match-found-box');
+  const noConnectionIcon = document.createElement('span');
+  noConnectionIcon.setAttribute(
+    'class',
+    'material-symbols-outlined connection-error'
+  );
+  noConnectionIcon.innerText = 'link_off';
+  errorBox.appendChild(noConnectionIcon);
+  const errorStatus = document.createElement('h1');
+  errorStatus.innerText =
+    error.statusCode === 404 || error.statusCode === 403
+      ? `ERROR ${error.statusCode}`
+      : error.statusCode;
+  errorBox.appendChild(errorStatus);
+  const errorMessage = document.createElement('h2');
+  errorMessage.innerText = error.message;
+  errorBox.appendChild(errorMessage);
+  gridBox.appendChild(errorBox);
+}
 
 //creating input-fa-xmark icon element to reset the search-input
 const searchInput = document.querySelector('.search-input');
@@ -46,7 +93,6 @@ searchInput.addEventListener('input', (event) => {
 
 //refetching data on search input focus
 searchInput.addEventListener('focus', () => {
-  console.log('focused');
   getMovies();
 });
 //resetting search-input
