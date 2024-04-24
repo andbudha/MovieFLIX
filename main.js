@@ -1,6 +1,8 @@
 //refresh page upon logo click
 const logo = document.querySelector('.logo-box');
 logo.addEventListener('click', () => {
+  const gridBox = document.querySelector('.grid-section');
+  gridBox.innerHTML = '';
   getMovies();
 });
 
@@ -11,9 +13,16 @@ filterIcon.addEventListener('click', () => {
   selectionBox.classList.toggle('hidden');
 });
 
+//hiding the advanced search
+function hideAdvancedSearch() {
+  const selectionBox = document.querySelector('.selection-box');
+  if (!selectionBox.classList.contains('hidden')) {
+    selectionBox.classList.add('hidden');
+  }
+}
+
 //getting data from rest-api
 const getMovies = async () => {
-  let errorMsg = '';
   showSpinner();
   try {
     const response = await fetch(url);
@@ -85,24 +94,29 @@ searchInput.addEventListener('input', (event) => {
   if (!event.target.value && faXmarkIcon) {
     removeInputValueBtnBox.removeChild(faXmarkIcon);
   }
-  const selectionBox = document.querySelector('.selection-box');
-  if (!selectionBox.classList.contains('hidden')) {
-    selectionBox.classList.add('hidden');
-  }
+  hideAdvancedSearch();
 });
 
 //refetching data on search input focus
 searchInput.addEventListener('focus', () => {
-  getMovies();
+  const gridBox = document.querySelector('.grid-section');
+  gridBox.innerHTML = '';
+  currentPage = 1;
+  hideAdvancedSearch();
+  showSpinner();
+  setTimeout(() => {
+    getMovies();
+    hideSpinner();
+  }, 300);
 });
+
 //resetting search-input
 function resetSearchInput() {
+  const gridBox = document.querySelector('.grid-section');
+  gridBox.innerHTML = '';
   searchInput.value = '';
   removeInputValueBtnBox.removeChild(faXmarkIcon);
-  const selectionBox = document.querySelector('.selection-box');
-  if (!selectionBox.classList.contains('hidden')) {
-    selectionBox.classList.add('hidden');
-  }
+  hideAdvancedSearch();
   getMovies();
 }
 faXmarkIcon.addEventListener('click', resetSearchInput);
@@ -306,8 +320,14 @@ const getSelectOptionValues = (movies) => {
   //filtering data on search-btn click
   const searchBtn = document.querySelector('.search-btn');
   searchBtn.addEventListener('click', () => {
+    const gridBox = document.querySelector('.grid-section');
     if (selectOptionValues.year === 0 && selectOptionValues.genre === 'all') {
-      initializePaginator(movies, currentPage);
+      gridBox.innerHTML = '';
+      showSpinner();
+      setTimeout(() => {
+        initializePaginator(movies, 1);
+        hideSpinner();
+      }, 500);
     } else if (
       selectOptionValues.year !== 0 &&
       selectOptionValues.genre === 'all'
@@ -315,7 +335,12 @@ const getSelectOptionValues = (movies) => {
       const filteredByYear = movies.filter(
         (movie) => movie.year === selectOptionValues.year
       );
-      initializePaginator(filteredByYear, currentPage);
+      gridBox.innerHTML = '';
+      showSpinner();
+      setTimeout(() => {
+        initializePaginator(filteredByYear, 1);
+        hideSpinner();
+      }, 500);
     } else if (
       selectOptionValues.genre !== 'all' &&
       selectOptionValues.year === 0
@@ -323,7 +348,12 @@ const getSelectOptionValues = (movies) => {
       const filteredByGenre = movies.filter(
         (movie) => movie.genres[0] === selectOptionValues.genre
       );
-      initializePaginator(filteredByGenre, currentPage);
+      gridBox.innerHTML = '';
+      showSpinner();
+      setTimeout(() => {
+        initializePaginator(filteredByGenre, 1);
+        hideSpinner();
+      }, 500);
     } else {
       const filteredByGenreAndYear = movies.filter((movie) => {
         return (
@@ -332,9 +362,19 @@ const getSelectOptionValues = (movies) => {
         );
       });
       if (!filteredByGenreAndYear.length) {
-        displayNoMatchFound();
+        gridBox.innerHTML = '';
+        showSpinner();
+        setTimeout(() => {
+          displayNoMatchFound();
+          hideSpinner();
+        }, 500);
       } else {
-        initializePaginator(filteredByGenreAndYear, currentPage);
+        gridBox.innerHTML = '';
+        showSpinner();
+        setTimeout(() => {
+          initializePaginator(filteredByGenreAndYear, 1);
+          hideSpinner();
+        }, 500);
       }
     }
   });
@@ -356,6 +396,8 @@ function initializePaginator(movies, currentPage) {
   let paginatedMovies = movies.slice(start, end);
   createMovieCard(paginatedMovies);
   createPageBtns(totalPageNum, movies);
+  const btn = document.querySelectorAll('.page')[currentPage - 1];
+  btn.classList.add('active-page');
 }
 
 function createPageBtns(totalPageNum, movies) {
@@ -370,7 +412,7 @@ function createPageBtns(totalPageNum, movies) {
 
 function pageBtn(pageBtn, pageNum, movies) {
   pageBtn.innerText = pageNum;
-  if (currentPage === pageNum) pageBtn.classList.add('active-page');
+  // if (currentPage === pageNum) pageBtn.classList.add('active-page');
   pageBtn.addEventListener('click', () => {
     currentPage = pageNum;
     initializePaginator(movies, currentPage);
