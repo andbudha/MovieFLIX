@@ -303,7 +303,8 @@ function getSelectOptionValues(movies) {
   selectionBox.appendChild(selectGenre);
 
   //initial select input values
-  let selectOptionValues = { genre: 'all', year: 0 };
+  let defaultReleaseYear = 0;
+  let selectOptionValues = { genre: 'all', year: defaultReleaseYear };
 
   //filtering by genre
   const genreSelect = document.querySelector('.movie-genre-select');
@@ -323,7 +324,10 @@ function getSelectOptionValues(movies) {
   const searchBtn = document.querySelector('.search-btn');
   searchBtn.addEventListener('click', () => {
     const gridBox = document.querySelector('.grid-section');
-    if (selectOptionValues.year === 0 && selectOptionValues.genre === 'all') {
+    if (
+      selectOptionValues.year === defaultReleaseYear &&
+      selectOptionValues.genre === 'all'
+    ) {
       gridBox.innerHTML = '';
       showSpinner();
       setTimeout(() => {
@@ -331,7 +335,7 @@ function getSelectOptionValues(movies) {
         hideSpinner();
       }, 500);
     } else if (
-      selectOptionValues.year !== 0 &&
+      selectOptionValues.year !== defaultReleaseYear &&
       selectOptionValues.genre === 'all'
     ) {
       const filteredByYear = movies.filter(
@@ -345,7 +349,7 @@ function getSelectOptionValues(movies) {
       }, 500);
     } else if (
       selectOptionValues.genre !== 'all' &&
-      selectOptionValues.year === 0
+      selectOptionValues.year === defaultReleaseYear
     ) {
       const filteredByGenre = movies.filter(
         (movie) => movie.genres[0] === selectOptionValues.genre
