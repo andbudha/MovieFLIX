@@ -239,19 +239,28 @@ function controller(movies) {
 /************ filtering according to the search input value***********/
 function filterOnMovieTitleTyping(movies) {
   const searchInput = document.querySelector('.search-input');
+
   searchInput.addEventListener('input', () => {
     const filteredMoviesUponInputValue = movies.filter((movie) =>
       movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
     );
-    searchtimer = setTimeout(() => {
-      if (filteredMoviesUponInputValue.length) {
-        initializePaginator(filteredMoviesUponInputValue, currentPage);
-        // clearTimeout(searchtimer);
-      } else {
-        displayNoMatchFound();
-        // clearTimeout(searchtimer);
-      }
-    }, 1500);
+    if (filteredMoviesUponInputValue.length) {
+      initializePaginator(filteredMoviesUponInputValue, currentPage);
+    } else {
+      displayNoMatchFound();
+    }
+
+    // clearTimeout(searchtimer);
+    // searchtimer = setTimeout(function () {
+    //   const filteredMoviesUponInputValue = movies.filter((movie) =>
+    //     movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
+    //   );
+    //   if (filteredMoviesUponInputValue.length) {
+    //     initializePaginator(filteredMoviesUponInputValue, currentPage);
+    //   } else {
+    //     displayNoMatchFound();
+    //   }
+    // }, 1000);
   });
 }
 
