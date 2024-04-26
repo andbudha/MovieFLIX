@@ -1,4 +1,4 @@
-//refresh page upon logo click
+/*****************refresh page upon logo click*************/
 const logo = document.querySelector('.logo-box');
 logo.addEventListener('click', () => {
   const gridBox = document.querySelector('.grid-section');
@@ -6,14 +6,14 @@ logo.addEventListener('click', () => {
   getMovies();
 });
 
-//displaying and hiding the advanced search
+/*****************show/hide the advanced search filter upon icon click*************/
 const filterIcon = document.querySelector('.filter');
 const selectionBox = document.querySelector('.selection-box');
 filterIcon.addEventListener('click', () => {
   selectionBox.classList.toggle('hidden');
 });
 
-//hiding the advanced search
+/*****************hiding the advanced search filter func*************/
 function hideAdvancedSearch() {
   const selectionBox = document.querySelector('.selection-box');
   if (!selectionBox.classList.contains('hidden')) {
@@ -21,8 +21,8 @@ function hideAdvancedSearch() {
   }
 }
 
-//getting data from rest-api
-const getMovies = async () => {
+/*****************getting data from rest-api*************/
+async function getMovies() {
   showSpinner();
   try {
     const response = await fetch(url);
@@ -48,8 +48,9 @@ const getMovies = async () => {
   } finally {
     hideSpinner();
   }
-};
+}
 
+/************ Error Catching Func***********/
 function errorCatching(error) {
   const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
@@ -79,7 +80,7 @@ function errorCatching(error) {
   gridBox.appendChild(errorBox);
 }
 
-//creating input-fa-xmark icon element to reset the search-input
+/*****************creating xmark icon element to reset the search-input*************/
 const searchInput = document.querySelector('.search-input');
 const removeInputValueBtnBox = document.querySelector(
   '.remove-input-value-btn-box'
@@ -97,7 +98,7 @@ searchInput.addEventListener('input', (event) => {
   hideAdvancedSearch();
 });
 
-//refetching data on search input focus
+/************ refetching data on search input focus***********/
 searchInput.addEventListener('focus', () => {
   const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
@@ -110,7 +111,7 @@ searchInput.addEventListener('focus', () => {
   }, 300);
 });
 
-//resetting search-input
+/************ resetting search-input func***********/
 function resetSearchInput() {
   const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
@@ -121,8 +122,8 @@ function resetSearchInput() {
 }
 faXmarkIcon.addEventListener('click', resetSearchInput);
 
-//creating and setting spinner
-const showSpinner = () => {
+/************ creating, showing and hiding spinner ***********/
+function showSpinner() {
   const gridBox = document.querySelector('.grid-section');
   const loaderBox = document.createElement('div');
   loaderBox.setAttribute('class', 'loader-box');
@@ -130,14 +131,14 @@ const showSpinner = () => {
   const loaderSpan = document.createElement('span');
   loaderSpan.setAttribute('class', 'loader');
   loaderBox.appendChild(loaderSpan);
-};
-const hideSpinner = () => {
+}
+function hideSpinner() {
   const loaderBox = document.querySelector('.loader-box');
   if (loaderBox) loaderBox.remove();
-};
+}
 
-//getting movies data and creating movie cards
-const createMovieCard = (movies) => {
+/************ getting movies data and creating movie cards ***********/
+function createMovieCard(movies) {
   //resetting the existing data
   const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
@@ -198,9 +199,9 @@ const createMovieCard = (movies) => {
     detailsHeaderCast.appendChild(castSpan);
     movieDetailBox.appendChild(detailsHeaderCast);
   }
-};
+}
 
-//poster magnifying upon hovering
+/************ poster magnifying upon hovering ***********/
 function magnifyPoster(cardDiv, imgEl, movieTitle) {
   if (imgEl) {
     cardDiv.addEventListener('mouseover', (event) => {
@@ -227,34 +228,35 @@ function magnifyPoster(cardDiv, imgEl, movieTitle) {
   }
 }
 
-//controller function
-const controller = (movies) => {
+/************ controller function ***********/
+function controller(movies) {
   createMovieCard(movies);
   filterOnMovieTitleTyping(movies);
   getSelectOptionValues(movies);
   initializePaginator(movies, currentPage);
-};
+}
 
-//filtering according to the search input value
-const filterOnMovieTitleTyping = (movies) => {
+/************ filtering according to the search input value***********/
+function filterOnMovieTitleTyping(movies) {
   const searchInput = document.querySelector('.search-input');
   searchInput.addEventListener('input', () => {
+    const filteredMoviesUponInputValue = movies.filter((movie) =>
+      movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
+    );
     searchtimer = setTimeout(() => {
-      const filteredMoviesUponInputValue = movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
-      );
       if (filteredMoviesUponInputValue.length) {
         initializePaginator(filteredMoviesUponInputValue, currentPage);
+        // clearTimeout(searchtimer);
       } else {
         displayNoMatchFound();
+        // clearTimeout(searchtimer);
       }
-
-      clearTimeout(searchtimer);
     }, 1500);
   });
-};
+}
 
-const getSelectOptionValues = (movies) => {
+/************ individual&combined data filtering ***********/
+function getSelectOptionValues(movies) {
   const selectGenre = document.querySelector('.movie-genre-select');
   const selectYear = document.querySelector('.release-year-select');
   selectGenre.innerHTML = '';
@@ -378,11 +380,12 @@ const getSelectOptionValues = (movies) => {
       }
     }
   });
-};
+}
 
-//paginator
+/*************** initializing and creating the paginator ****************/
 const pageBox = document.querySelector('.page-box');
 
+//paginator initial values
 let currentPage = 1;
 const itemsPerPage = 8;
 
@@ -412,14 +415,13 @@ function createPageBtns(totalPageNum, movies) {
 
 function pageBtn(pageBtn, pageNum, movies) {
   pageBtn.innerText = pageNum;
-  // if (currentPage === pageNum) pageBtn.classList.add('active-page');
   pageBtn.addEventListener('click', () => {
     currentPage = pageNum;
     initializePaginator(movies, currentPage);
   });
 }
 
-//displaying no-match-found notification
+/******************creating, showing and hiding the no-match-found notification****************/
 function displayNoMatchFound() {
   const gridBox = document.querySelector('.grid-section');
   gridBox.innerHTML = '';
@@ -449,5 +451,5 @@ function hideNoMatchFound() {
   console.log(noMatchFoundBox);
 }
 
-//get data and create movie cards on initial rendering
+/*********************get data and create movie cards on initial rendering***********************/
 getMovies();
