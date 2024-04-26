@@ -1,3 +1,5 @@
+let abortController;
+let searchtimer;
 /*****************refresh page upon logo click*************/
 const logo = document.querySelector('.logo-box');
 logo.addEventListener('click', () => {
@@ -24,8 +26,11 @@ function hideAdvancedSearch() {
 /*****************getting data from rest-api*************/
 async function getMovies() {
   showSpinner();
+
+  abortController = new AbortController();
+  const signal = abortController.signal;
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal });
     const data = await response.json();
     console.log(data);
     if (!data.length && data.statusCode === 404) {
@@ -241,26 +246,19 @@ function filterOnMovieTitleTyping(movies) {
   const searchInput = document.querySelector('.search-input');
 
   searchInput.addEventListener('input', () => {
-    const filteredMoviesUponInputValue = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
-    );
-    if (filteredMoviesUponInputValue.length) {
-      initializePaginator(filteredMoviesUponInputValue, currentPage);
-    } else {
-      displayNoMatchFound();
-    }
+    abortController.abort();
 
-    // clearTimeout(searchtimer);
-    // searchtimer = setTimeout(function () {
-    //   const filteredMoviesUponInputValue = movies.filter((movie) =>
-    //     movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
-    //   );
-    //   if (filteredMoviesUponInputValue.length) {
-    //     initializePaginator(filteredMoviesUponInputValue, currentPage);
-    //   } else {
-    //     displayNoMatchFound();
-    //   }
-    // }, 1000);
+    clearTimeout(searchtimer);
+    searchtimer = setTimeout(function () {
+      const filteredMoviesUponInputValue = movies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchInput.value.toLowerCase())
+      );
+      if (filteredMoviesUponInputValue.length) {
+        initializePaginator(filteredMoviesUponInputValue, currentPage);
+      } else {
+        displayNoMatchFound();
+      }
+    }, 1000);
   });
 }
 
