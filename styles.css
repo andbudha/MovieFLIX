@@ -349,7 +349,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-.chevron,
 .page {
   height: 30px;
   width: 30px;
@@ -363,11 +362,15 @@ body {
   align-items: center;
   justify-content: center;
 }
-.chevron:hover,
 .page:hover {
   background: #f6b17a;
   border: 1px solid #2d3250;
   color: #2d3250;
+  transition: 0.4s;
+}
+
+.page:not(:hover) {
+  transition: 0.4s;
 }
 
 .active-page {
